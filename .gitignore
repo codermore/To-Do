@@ -1,0 +1,29 @@
+# Archivos de Python
+*.pyc
+__pycache__/
+
+# Configuración de entorno
+.env
+venv/
+*.sqlite3
+
+# Archivos de migraciones de Django compilados
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# Archivos de logs
+*.log
+
+# Archivos de caché
+*.py[cod]
+*.swp
+.DS_Store
+db.sqlite3  # Evita subir la base de datos local
+
+# Archivos de entorno de Django
+*.log
+local_settings.py
+
+# Archivos generados por IDEs
+.vscode/
+.idea/
