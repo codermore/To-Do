@@ -7,7 +7,7 @@ function Navigation() {
         <Link to='/tasks'>
             <h1>Task App</h1>
         </Link>
-        <Link to="/task-create">Create Task</Link>
+        <Link to="/tasks-create">Create Task</Link>
     </div>
   )
 }
