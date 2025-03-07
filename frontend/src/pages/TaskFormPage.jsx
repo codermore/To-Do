@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form'
-import { createTask, deleteTask } from '../api/tasks.api';
+import { createTask, deleteTask, updateTask, getTask } from '../api/tasks.api';
 import { useNavigate, useParams } from 'react-router-dom'
 
 function TaskFormPage() {
@@ -7,7 +8,8 @@ function TaskFormPage() {
   const { 
     register, //Registra los campos del formulario y permite definir validaciones.
     handleSubmit, //Maneja el envío del formulario y ejecuta la función onSubmit solo si los datos son válidos.
-    formState:{ errors } // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
+    formState:{ errors }, // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
+    setValue
   } = useForm();
   const navigate = useNavigate() 
   const params = useParams()
@@ -35,9 +37,24 @@ function TaskFormPage() {
   */
 
   const onSubmit = handleSubmit(async data => {
-    await createTask(data);
+    if (params.id){
+      await updateTask(params.id, data)
+    } else {
+      await createTask(data);
+    }
     navigate("/tasks")
   })
+
+  useEffect(() => {
+    async function loadTask() {
+      if (params.id){
+        const res = await getTask(params.id)
+        setValue('title', res.data.title)
+        setValue('description', res.data.description)
+      } 
+    }
+    loadTask();
+  }, [])
 
   return (
     <div>
