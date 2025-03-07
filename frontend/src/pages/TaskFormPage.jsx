@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { createTask } from '../api/tasks.api';
+import { useNavigate } from 'react-router-dom'
 
 function TaskFormPage() {
 
@@ -8,6 +9,8 @@ function TaskFormPage() {
     handleSubmit, //Maneja el envío del formulario y ejecuta la función onSubmit solo si los datos son válidos.
     formState:{ errors } // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
   } = useForm();
+  const navigate = useNavigate() 
+
 
   /* 
   🔹 Cuando llamamos a useForm(), esta función nos devuelve un objeto con varias propiedades y métodos que facilitan la gestión de formularios en React. 
@@ -33,7 +36,7 @@ function TaskFormPage() {
 
   const onSubmit = handleSubmit(async data => {
     const res = await createTask(data);
-    console.log(res)
+    navigate("/tasks")
   })
 
   return (
