@@ -2,16 +2,17 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form'
 import { createTask, deleteTask, updateTask, getTask } from '../api/tasks.api';
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 
 function TaskFormPage() {
 
-  const { 
+  const {
     register, //Registra los campos del formulario y permite definir validaciones.
     handleSubmit, //Maneja el envío del formulario y ejecuta la función onSubmit solo si los datos son válidos.
-    formState:{ errors }, // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
+    formState: { errors }, // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
     setValue
   } = useForm();
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
   const params = useParams()
 
   /* 
@@ -37,32 +38,36 @@ function TaskFormPage() {
   */
 
   const onSubmit = handleSubmit(async data => {
-    if (params.id){
+    if (params.id) {
       await updateTask(params.id, data)
     } else {
       await createTask(data);
+      toast.success('Tarea creada', {
+        position: 'bottom-right'
+      })
     }
     navigate("/tasks")
   })
 
   useEffect(() => {
     async function loadTask() {
-      if (params.id){
+      if (params.id) {
         const res = await getTask(params.id)
         setValue('title', res.data.title)
         setValue('description', res.data.description)
-      } 
+      }
     }
     loadTask();
   }, [])
 
   return (
-    <div>
+    <div className='max-w-xl mx-auto'>
       <form onSubmit={onSubmit}>
         <input
           type="text"
           placeholder='title'
           {...register("title", { required: true })}
+          className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
         />
         {errors.title && <span>titulo es requerido</span>}
 
@@ -70,20 +75,26 @@ function TaskFormPage() {
           rows="3"
           placeholder='description'
           {...register("description", { required: true })}
+          className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
         ></textarea>
         {errors.description && <span>descripcion es requerido</span>}
 
-        <button>Save</button>
+        <button
+          className='bg-indigo-500 p-3 rounded-lg block w-full mt-3'
+        >Save</button>
       </form>
 
-      {params.id && <button onClick={async () => {
-        const accepted = window.confirm('estas seguro?')
-        if (accepted){
-          await deleteTask(params.id)
-          navigate("/tasks")
-        }
-      }}
-      >Delete</button>}
+      {params.id &&
+        <button
+          className='bg-red-500 p-3 rounded-lg w-48 mt-3'
+          onClick={async () => {
+            const accepted = window.confirm('estas seguro?')
+            if (accepted) {
+              await deleteTask(params.id)
+              navigate("/tasks")
+            }
+          }}
+        >Delete</button>}
     </div>
   )
 }
