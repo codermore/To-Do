@@ -38,10 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #my apps
+    #mis herramientas
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
-    'tasks'
+
+    #my apps
+    'tasks',  # App de tareas
+    'users',  # App para autenticación
 ]
 
 MIDDLEWARE = [
