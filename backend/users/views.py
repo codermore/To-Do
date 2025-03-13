@@ -1,10 +1,12 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from .serializer import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 
@@ -21,7 +23,23 @@ def mi_vista(request):
 
 @api_view(['POST']) #Decorador 1) Filtra request.method. 2) Maneja Formatos JSON
 def login(request):
-    return Response({})
+
+    user = get_object_or_404(User, username=request.data['username'])
+
+    if not user.check_password(request.data['password']):
+        return Response(
+            {"error": "Invalid password"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    token, _ = Token.objects.get_or_create(user=user)
+    serializer = UserSerializer(instance=user)
+
+    return Response({
+        "token": token.key,
+        "user": serializer.data},
+        status=status.HTTP_200_OK
+    )
 
 @api_view(['POST'])  # Solo permite solicitudes POST
 def register(request):
@@ -54,6 +72,3 @@ def register(request):
     # Si los datos no son válidos, devuelve los errores con código 400 (Bad Request)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET']) #Decorador
-def profile(request):
-    return Response({})
