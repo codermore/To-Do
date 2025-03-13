@@ -72,3 +72,27 @@ def register(request):
     # Si los datos no son válidos, devuelve los errores con código 400 (Bad Request)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+'''
+1️⃣ @authentication_classes([TokenAuthentication])
+    🔹 ¿Qué hace?
+        Indica que la vista usará Token Authentication como método de autenticación.
+        Requiere que el usuario envíe un token en la cabecera Authorization.
+    🔹 Si el token es válido, se reconoce al usuario.
+    🔹 Si el token es inválido o no se envía, la solicitud fallará con 401 Unauthorized.
+
+2️⃣ @permission_classes([IsAuthenticated])
+    🔹 ¿Qué hace?
+        Restringe el acceso a la vista solo a usuarios autenticados.
+        Si el usuario no está autenticado, devuelve un error 403 Forbidden.
+        Debe ir acompañado de un sistema de autenticación, como TokenAuthentication o SessionAuthentication.
+
+🔐 Ambos decoradores se usan juntos cuando queremos proteger una vista en Django REST Framework.
+'''
+
+@api_view(['POST']) #Decorador
+@authentication_classes([TokenAuthentication])  # Se usa Token Authentication
+@permission_classes([IsAuthenticated]) # Solo permite usuarios autenticados
+def profile(request):
+    serializer = UserSerializer(instance=request.user)
+    print(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
