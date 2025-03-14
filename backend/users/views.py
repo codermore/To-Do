@@ -10,12 +10,8 @@ from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
 
-#sin Decorador
 '''
-def mi_vista(request):
-    if request.method == 'POST':
-        return JsonResponse({"mensaje": "Hola desde POST"})
-    return JsonResponse({"error": "Método no permitido"}, status=405)
+Esta es una FBV (vista basada en funciones)
 '''
 
 #con Decorador
