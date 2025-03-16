@@ -138,11 +138,40 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+'''
+Como por defecto TokenAuthentication busca el token en el Header.
+    'rest_framework.authentication.TokenAuthentication',
+
+# Usa cookies para el token
+    'users.authentication.CookieTokenAuthentication',  
+
+# Cookies JWT 
+'rest_framework_simplejwt.authentication.JWTAuthentication',  # Autenticación estándar JWT
+
+'''
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'users.authentication.CookieTokenAuthentication', 
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Autenticación estándar JWT 
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ]
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),  # Token válido por 30 min
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh token válido por 1 día
+    'ROTATE_REFRESH_TOKENS': True,  # Si es True, genera un nuevo refresh token con cada uso
+    'BLACKLIST_AFTER_ROTATION': True,  # Si es True, el refresh token viejo queda inválido
+
+    # Configuración de cookies
+    'AUTH_COOKIE': 'auth_token',  # Nombre de la cookie para el token de acceso
+    'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly para evitar acceso desde JS
+    'AUTH_COOKIE_SECURE': False,  # Poner en True en producción con HTTPS
+    'AUTH_COOKIE_SAMESITE': 'Lax',  # Protege contra CSRF
 }
