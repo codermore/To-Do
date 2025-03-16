@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
 
 # Create your views here.
@@ -18,6 +18,7 @@ Esta es una FBV (vista basada en funciones)
 # @api_view  
 
 @api_view(['POST']) #Decorador 1) Filtra request.method. 2) Maneja Formatos JSON
+@permission_classes([AllowAny]) 
 def login(request):
 
     user = get_object_or_404(User, username=request.data['username'])
@@ -38,6 +39,7 @@ def login(request):
     )
 
 @api_view(['POST'])  # Solo permite solicitudes POST
+@permission_classes([AllowAny]) 
 def register(request):
     """
     Endpoint para registrar un nuevo usuario.
