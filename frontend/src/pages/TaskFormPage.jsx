@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form'
-import { createTask, deleteTask, updateTask, getTask } from '../api/tasks.api';
+import { createTask, deleteTask, updateTask, getTask } from '../api/tasks';
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 

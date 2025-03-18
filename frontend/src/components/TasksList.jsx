@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getAllTasks } from '../api/tasks.api'
+import { getAllTasks } from '../api/tasks'
 import TasksCard from './TasksCard'
 
 

@@ -138,6 +138,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 '''
 Como por defecto TokenAuthentication busca el token en el Header.
     'rest_framework.authentication.TokenAuthentication',
