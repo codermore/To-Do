@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     const signup = async (user) => {
         try {
             const res = await createUser(user)
+            setErrors([])
         } catch (error) {
             console.log(error)
             setErrors(error.response.data.errors)
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }) => {
             console.log(res.data)
             setUser(res.data)
             setIsAuthenticated(true)
+            setErrors([])
         } catch (error) {
             console.log(error)
             setErrors(error.response.data.errors)

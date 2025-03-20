@@ -35,7 +35,7 @@ function LoginPage() {
     const onSubmit = handleSubmit(async (data) => {
         try {
             await signin(data);
-            toast.success("Sesion iniciada"); 
+            toast.success("Sesion iniciada");
 
             setTimeout(() => {
                 navigate("/tasks");  // Redirige después de 2 segundos
@@ -46,28 +46,31 @@ function LoginPage() {
     })
 
     return (
-        <div className='max-w-xl mx-auto'>
-            <form onSubmit={onSubmit}>
-                <input
-                    type="text"
-                    placeholder='username'
-                    {...register("username", { required: true })}
-                    className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
-                />
-                {errors.username && <span>username es requerido</span>}
+        <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
+            <div className='bg-zinc-800 max-w-md w-full p-6 rounded-md'>
+                <h1 className='text-2xl font-bold mb-6'>Login</h1>
+                <form onSubmit={onSubmit}>
+                    <input
+                        type="text"
+                        placeholder='username'
+                        {...register("username", { required: true })}
+                        className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
+                    />
+                    {errors.username && <span>username es requerido</span>}
 
-                <input
-                    type="password"
-                    placeholder='password'
-                    {...register("password", { required: true })}
-                    className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
-                />
-                {errors.password && <span>password es requerido</span>}
+                    <input
+                        type="password"
+                        placeholder='password'
+                        {...register("password", { required: true })}
+                        className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
+                    />
+                    {errors.password && <span>password es requerido</span>}
 
-                <button
-                    className='bg-indigo-500 p-3 rounded-lg block w-full mt-3'
-                >Log In</button>
-            </form>
+                    <button
+                        className='bg-indigo-500 p-3 rounded-lg block w-full mt-3'
+                    >Log In</button>
+                </form>
+            </div>
         </div>
     )
 }
