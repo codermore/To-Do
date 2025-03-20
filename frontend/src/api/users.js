@@ -12,3 +12,15 @@ export const createUser = (data) => {
         });
 };
 
+export const login = (data) => {
+    return API.post('/auth/login/', data)
+        .then(response =>{
+            console.log("respuesta del servidor:", response)
+            return response
+        })
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            throw error;
+        });
+}
+

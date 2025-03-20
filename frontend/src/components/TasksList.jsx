@@ -10,6 +10,7 @@ function TasksList() {
     useEffect(() => {
         async function loadTasks() {
             const res = await getAllTasks()
+            console.log(res)
             setTasks(res.data)
         }
         loadTasks();

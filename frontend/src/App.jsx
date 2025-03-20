@@ -5,22 +5,27 @@ import TaskFormPage from './pages/TaskFormPage'
 import Navigation from './components/Navigation'
 import { Toaster } from 'react-hot-toast'
 import RegisterPage from './pages/RegisterPage'
+import { AuthProvider } from './context/AuthContext'
+import LoginPage from './pages/LoginPage'
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className='container mx-auto'>
-        <Navigation />
-        <Routes>
-          <Route path='/' element={<Navigate to="/tasks" />} />
-          <Route path='/tasks' element={<TasksPage />} />
-          <Route path='/tasks-create' element={<TaskFormPage />} />
-          <Route path='/tasks/:id' element={<TaskFormPage />} />
-          <Route path='/register' element={<RegisterPage />} />
-        </Routes>
-        <Toaster />
-      </div>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <div className='container mx-auto'>
+          <Navigation />
+          <Routes>
+            <Route path='/' element={<Navigate to="/tasks" />} />
+            <Route path='/tasks' element={<TasksPage />} />
+            <Route path='/tasks-create' element={<TaskFormPage />} />
+            <Route path='/tasks/:id' element={<TaskFormPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/login' element={<LoginPage />} />
+          </Routes>
+          <Toaster />
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

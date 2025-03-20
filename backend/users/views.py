@@ -21,15 +21,21 @@ Esta es una FBV (vista basada en funciones)
 @permission_classes([AllowAny]) 
 def login(request):
 
-    user = get_object_or_404(User, username=request.data['username'])
+    try:
+        user = User.objects.get(username=request.data['username'])
+    except User.DoesNotExist:
+        return Response(
+            {"errors": ['The user is not registered']},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     if not user.check_password(request.data['password']):
         return Response(
-            {"error": "Invalid password"},
+            {"errors": ['Invalid password']},
             status=status.HTTP_400_BAD_REQUEST
         )
     
-    token, _ = Token.objects.get_or_create(user=user)
+    # token, _ = Token.objects.get_or_create(user=user)
     serializer = UserSerializer(instance=user)
 
     # Generar tokens
@@ -80,10 +86,18 @@ def register(request):
             {"user": serializer.data}, 
             status=status.HTTP_201_CREATED  # Código 201: recurso creado exitosamente
         )
+    
+    # Pasamos de un diccionario a un array.
+    error_list = []
+    for field, errors in serializer.errors.items():
+        for error in errors:
+            # error_list.append(f"{field}: {error}")
+            error_list.append({error})
 
+    
+    print(error_list)
     # Si los datos no son válidos, devuelve los errores con código 400 (Bad Request)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    return Response({"errors": error_list}, status=status.HTTP_400_BAD_REQUEST)
 '''
 1️⃣ @authentication_classes([TokenAuthentication])
     🔹 ¿Qué hace?
