@@ -1,6 +1,5 @@
-import { createContext, useContext, useState } from "react";
-import { createUser, login } from '../api/users';
-
+import { createContext, useContext, useState, useEffect } from "react";
+import { getUser, createUser, login } from '../api/users';
 
 const AuthContext = createContext()
 
@@ -16,6 +15,21 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await getUser();
+                setUser(res.data);
+                setIsAuthenticated(true);
+            } catch (error) {
+                setUser(null);
+                setIsAuthenticated(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
 
     const signup = async (user) => {
         try {

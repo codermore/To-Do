@@ -8,6 +8,9 @@ import RegisterPage from './pages/RegisterPage'
 import { AuthProvider } from './context/AuthContext'
 import LoginPage from './pages/LoginPage'
 
+
+import ProtectedRoute from './components/ProtectedRoute'
+
 function App() {
   return (
     <AuthProvider>
@@ -15,12 +18,18 @@ function App() {
         <div className='container mx-auto'>
           <Navigation />
           <Routes>
-            <Route path='/' element={<Navigate to="/tasks" />} />
-            <Route path='/tasks' element={<TasksPage />} />
-            <Route path='/tasks-create' element={<TaskFormPage />} />
-            <Route path='/tasks/:id' element={<TaskFormPage />} />
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/login' element={<LoginPage />} />
+
+            {/* 🔒 Agrupar rutas protegidas */}
+            <Route element={<ProtectedRoute />}>
+              <Route path='/' element={<Navigate to="/tasks" />} />
+              <Route path='/tasks' element={<TasksPage />} />
+              <Route path='/tasks-create' element={<TaskFormPage />} />
+              <Route path='/tasks/:id' element={<TaskFormPage />} />
+            </Route>
+
+
           </Routes>
           <Toaster />
         </div>
