@@ -36,3 +36,15 @@ export const getUser = () => {
         });
 }
 
+export const logout = () => {
+    return API.post('/auth/logout/')
+        .then(response => {
+            console.log("respuesta del servidor:", response)
+            return response
+        })
+        .catch(error => {
+            console.error("Error en la solicitud:", error);
+            throw error;
+        });
+}
+
