@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-fvwimpbgo4f6prk!-8tuy+2id=j6(+c++db9d&k(=2vq#bw3u%'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "clave_de_respaldo")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Asegurar que Django acepte conexiones desde Railway
+ALLOWED_HOSTS = ["railway.app", os.getenv("ALLOWED_HOSTS", "127.0.0.1")]
 
 
 # Application definition
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',  # Asegura que Django no sirva estáticos en desarrollo
 
     #mis herramientas
     'rest_framework',
@@ -50,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Usar WhiteNoise para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,10 +91,6 @@ WSGI_APPLICATION = 'taskmanager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 DATABASES = {
     'default': {
@@ -133,7 +137,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# Configurar static y media files (para archivos estáticos en producción)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -143,7 +150,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #cors autorization
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    # "http://localhost:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -182,6 +189,6 @@ SIMPLE_JWT = {
     # Configuración de cookies
     'AUTH_COOKIE': 'auth_token',  # Nombre de la cookie para el token de acceso
     'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly para evitar acceso desde JS
-    'AUTH_COOKIE_SECURE': False,  # Poner en True en producción con HTTPS
+    'AUTH_COOKIE_SECURE': True,  # Poner en True en producción con HTTPS
     'AUTH_COOKIE_SAMESITE': 'Lax',  # Protege contra CSRF
 }
