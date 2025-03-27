@@ -46,15 +46,15 @@ function RegisterPage() {
     return (
         <div className='flex h-[calc(100vh-100px)] items-center justify-center'>
             <div className='bg-zinc-800 max-w-md w-full p-6 rounded-md'>
-                <h1 className='text-2xl font-bold mb-6'>Register</h1>
+                <h1 className='text-2xl font-bold mb-6'>Crea una cuenta</h1>
                 <form onSubmit={onSubmit}>
                     <input
                         type="text"
-                        placeholder='username'
+                        placeholder='nombre de usuario'
                         {...register("username", { required: true })}
                         className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
                     />
-                    {errors.username && <span>username es requerido</span>}
+                    {errors.username && <span  className='text-red-500'>* nombre de usuario es requerido</span>}
 
                     <input
                         type="email"
@@ -65,15 +65,15 @@ function RegisterPage() {
 
                     <input
                         type="password"
-                        placeholder='password'
+                        placeholder='contraseña'
                         {...register("password", { required: true })}
                         className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
                     />
-                    {errors.password && <span>password es requerido</span>}
+                    {errors.password && <span  className='text-red-500'>* constraseña es requerida</span>}
 
                     <button
-                        className='bg-indigo-500 p-3 rounded-lg block w-full mt-3'
-                    >Save</button>
+                        className='bg-indigo-500 p-3 rounded-lg block w-full mt-3 transition hover:bg-indigo-700'
+                    >Guardar</button>
                 </form>
             </div>
         </div>

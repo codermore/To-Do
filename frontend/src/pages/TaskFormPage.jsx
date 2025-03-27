@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { createTask, deleteTask, updateTask, getTask } from '../api/tasks';
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
+import { useAuth } from '../context/AuthContext'
 
 function TaskFormPage() {
 
@@ -12,6 +13,9 @@ function TaskFormPage() {
     formState: { errors }, // formState es un objeto que contiene información sobre el estado del formulario.  { errors } extrae solo la propiedad errors, que almacena los errores de validación de los campos.
     setValue
   } = useForm();
+
+  const { user } = useAuth()
+
   const navigate = useNavigate()
   const params = useParams()
 
@@ -50,6 +54,9 @@ function TaskFormPage() {
   })
 
   useEffect(() => {
+    console.log(user.id)
+    setValue('user', user.id)
+
     async function loadTask() {
       if (params.id) {
         const res = await getTask(params.id)
@@ -65,38 +72,44 @@ function TaskFormPage() {
       <form onSubmit={onSubmit}>
         <input
           type="text"
-          placeholder='title'
+          placeholder='Titulo de la tarea'
           {...register("title", { required: true })}
           className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
         />
-        {errors.title && <span>titulo es requerido</span>}
+        {errors.title && <span  className='text-red-500'>titulo es requerido</span>}
 
         <textarea
           rows="3"
-          placeholder='description'
+          placeholder='Descipcion'
           {...register("description", { required: true })}
           className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
         ></textarea>
-        {errors.description && <span>descripcion es requerido</span>}
+        {errors.description && <span className='text-red-500'>descripcion es requerido</span>}
 
-        <button
-          className='bg-indigo-500 p-3 rounded-lg block w-full mt-3'
-        >Save</button>
+        <div className={`flex ${params.id ? "gap-2" : "block"} mt-3`}>
+          <button className='bg-indigo-500 transition hover:bg-indigo-700 p-3 rounded-lg w-full'>
+            Guardar
+          </button>
+
+          {params.id && (
+            <button
+              className='bg-red-500 transition hover:bg-red-600 p-3 rounded-lg w-full'
+              onClick={async () => {
+                const accepted = window.confirm('estas seguro?')
+                if (accepted) {
+                  await deleteTask(params.id)
+                  navigate("/tasks")
+                }
+              }}
+            >
+              Eliminar tarea
+            </button>
+          )}
+        </div>
       </form>
-
-      {params.id &&
-        <button
-          className='bg-red-500 p-3 rounded-lg w-48 mt-3'
-          onClick={async () => {
-            const accepted = window.confirm('estas seguro?')
-            if (accepted) {
-              await deleteTask(params.id)
-              navigate("/tasks")
-            }
-          }}
-        >Delete</button>}
     </div>
-  )
+  );
+
 }
 
 export default TaskFormPage
