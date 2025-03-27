@@ -25,13 +25,13 @@ def login(request):
         user = User.objects.get(username=request.data['username'])
     except User.DoesNotExist:
         return Response(
-            {"errors": ['The user is not registered']},
+            {"errors": ['El usuario no esta registrado']},
             status=status.HTTP_400_BAD_REQUEST
         )
 
     if not user.check_password(request.data['password']):
         return Response(
-            {"errors": ['Invalid password']},
+            {"errors": ['Contraseña incorrecta']},
             status=status.HTTP_400_BAD_REQUEST
         )
     
