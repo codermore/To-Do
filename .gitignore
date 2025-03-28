@@ -42,6 +42,7 @@ dist
 dist-ssr
 *.local
 
+# staticfiles
 *.staticfiles/
 staticfiles/
 

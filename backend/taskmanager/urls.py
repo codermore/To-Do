@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from taskmanager.views import home  # Importa la vista
 
 urlpatterns = [
+    path('', home, name='home'),  # Página Home en la URL raíz
     path('admin/', admin.site.urls),
     path('api/', include('tasks.urls')),
     path('api/auth/', include('users.urls'))
-
 ]

@@ -14,8 +14,11 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+if os.path.exists(".env"):
+    load_dotenv()
 
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,8 +33,6 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "clave_de_respaldo")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Asegurar que Django acepte conexiones desde Railway
-ALLOWED_HOSTS = ["railway.app", os.getenv("ALLOWED_HOSTS", "127.0.0.1")]
 
 
 # Application definition
