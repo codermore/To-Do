@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from django_ratelimit.decorators import ratelimit
-from django_ratelimit.exceptions import Ratelimited
 
 # Create your views here.
 
@@ -72,47 +71,54 @@ def get_client_ip(request):
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
-    try:
-        real_ip = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR"))
-        print(f"IP detectada (X_FORWARDED_FOR): {real_ip}")
-        print(f"Rate limit activado: {getattr(request, 'limited', False)}") 
-        print("IP detectada (REMOTE_ADDR):", request.META.get('REMOTE_ADDR'))
 
-        # Verifica si la solicitud fue limitada (por si block=False en algún caso)
-        if getattr(request, 'limited', False):
-            return Response(
-                {"errors": "Has superado el límite de intentos. Inténtalo más tarde."}, 
-                status=status.HTTP_429_TOO_MANY_REQUESTS
-            )
+    real_ip = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR"))
+    print(f"IP detectada: {real_ip}")
 
-        serializer = UserSerializer(data=request.data)
+    print(f"Rate limit activado: {getattr(request, 'limited', False)}") 
+    print("IP detectada:", request.META.get('REMOTE_ADDR'))  # Verifica la IP real
 
-        if serializer.is_valid():
-            user = User.objects.create_user(
-                username=serializer.validated_data['username'],
-                email=serializer.validated_data.get('email', ''),
-                password=serializer.validated_data['password']
-            )
-
-            return Response(
-                {"user": serializer.data}, 
-                status=status.HTTP_201_CREATED
-            )
-
-        error_list = []
-        for field, errors in serializer.errors.items():
-            for error in errors:
-                error_list.append({error})
-
-        print(error_list)
-        return Response({"errors": error_list}, status=status.HTTP_400_BAD_REQUEST)
-
-    except Ratelimited:
-        print(f"⛔ Ratelimit activado para IP: {get_client_ip(request)}")
+    # Verifica si la solicitud fue limitada
+    if getattr(request, 'limited', False):
         return Response(
-            {"errors": "Has superado el límite de intentos. Inténtalo más tarde."},
+            {"errors": "Has superado el límite de intentos. Inténtalo más tarde."}, 
             status=status.HTTP_429_TOO_MANY_REQUESTS
         )
+
+    """
+    Endpoint para registrar un nuevo usuario.
+    Recibe los datos del usuario en el cuerpo de la solicitud (JSON).
+    Devuelve un token de autenticación y los datos del usuario si el registro es exitoso.
+    """
+
+    # convierte datos JSON --> objeto de modelo válido para Django
+    serializer = UserSerializer(data=request.data)
+
+    if serializer.is_valid():  # Verifica si los datos cumplen con las reglas de validación
+        # Crea el usuario con la contraseña encriptada
+        user = User.objects.create_user(
+            username=serializer.validated_data['username'],  # Nombre de usuario
+            email=serializer.validated_data.get('email', ''),  # Email (opcional)
+            password=serializer.validated_data['password']  # Contraseña (se encripta automáticamente)
+        )
+
+        # Retorna el token y los datos del usuario en la respuesta
+        return Response(
+            {"user": serializer.data}, 
+            status=status.HTTP_201_CREATED  # Código 201: recurso creado exitosamente
+        )
+    
+    # Pasamos de un diccionario a un array.
+    error_list = []
+    for field, errors in serializer.errors.items():
+        for error in errors:
+            # error_list.append(f"{field}: {error}")
+            error_list.append({error})
+
+    
+    print(error_list)
+    # Si los datos no son válidos, devuelve los errores con código 400 (Bad Request)
+    return Response({"errors": error_list}, status=status.HTTP_400_BAD_REQUEST)
 
 '''
 1️⃣ @permission_classes([IsAuthenticated])

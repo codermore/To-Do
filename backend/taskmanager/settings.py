@@ -74,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'taskmanager.ratelimit_middleware.RatelimitMiddleware', #my custom middleware
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # Usar WhiteNoise para servir archivos estáticos en producción
     'django.contrib.sessions.middleware.SessionMiddleware',
