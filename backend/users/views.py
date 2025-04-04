@@ -67,7 +67,7 @@ def get_client_ip(request):
     print(f"IP detectada: {ip}")  # 👀 Debugging
     return ip
 
-@ratelimit(key='ip', rate='1/h', method='POST', block=True)  # Usa 'ip' directamente
+@ratelimit(key=lambda r: get_client_ip(r), rate='1/h', method='POST', block=True)  # Usa 'ip' directamente
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
