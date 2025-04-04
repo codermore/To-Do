@@ -35,6 +35,16 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "clave_de_respaldo")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+# REDIS
+DJANGO_RATELIMIT_CACHE = "default"  # Asegura que usa el caché definido en CACHES
+RATELIMIT_USE_X_FORWARDED_FOR = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': os.getenv("REDIS_URL"),
+    }
+}
 
 
 # Application definition
@@ -52,6 +62,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'django_ratelimit',
 
     #my apps
     'tasks',  # App de tareas
@@ -153,7 +164,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #cors autorization
 
 CORS_ALLOWED_ORIGINS = [
-    # "http://localhost:5173",
+    "http://localhost:5173",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
