@@ -57,12 +57,16 @@ def login(request):
 
     return response
 
-@ratelimit(
-    key=lambda r: r.META.get("HTTP_X_FORWARDED_FOR", r.META.get("REMOTE_ADDR")).split(",")[0].strip(),
-    rate='1/h',
-    method='POST',
-    block=True
-)
+def get_client_ip(request):
+    """ Obtiene la IP del cliente de forma segura. """
+    ip = request.META.get("HTTP_X_FORWARDED_FOR")
+    if ip:
+        ip = ip.split(",")[0].strip()  # Toma solo la primera IP si hay múltiples
+    else:
+        ip = request.META.get("REMOTE_ADDR", "")
+    return ip
+
+@ratelimit(key=get_client_ip, rate='1/h', method='POST', block=True)
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
