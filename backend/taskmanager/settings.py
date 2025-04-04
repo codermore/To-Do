@@ -46,6 +46,10 @@ CACHES = {
     }
 }
 
+# Asegurar que Django confíe en proxies inversos
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 # Application definition
 

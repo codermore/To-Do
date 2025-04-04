@@ -57,17 +57,18 @@ def login(request):
 
     return response
 
-@ratelimit(key='ip', rate='1/h', method='ALL', block=True)
+@ratelimit(
+    key=lambda r: r.META.get("HTTP_X_FORWARDED_FOR", r.META.get("REMOTE_ADDR")).split(",")[0].strip(),
+    rate='1/h',
+    method='POST',
+    block=True
+)
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
 
     real_ip = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR"))
     print(f"IP detectada: {real_ip}")
-
-    print("Headers recibidos:")
-    for key, value in request.META.items():
-        print(f"{key}: {value}")
 
     print(f"Rate limit activado: {getattr(request, 'limited', False)}") 
     print("IP detectada:", request.META.get('REMOTE_ADDR'))  # Verifica la IP real
