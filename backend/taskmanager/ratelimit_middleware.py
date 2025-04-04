@@ -14,19 +14,20 @@ class RatelimitMiddleware:
             print(f"🛡 IP detectada: {ip}")
 
             key = f"register-ip-{ip}"
-            attempts = cache.get(key, 0)
+            attempts = cache.get(key)
 
-            if attempts >= self.max_requests:
-                print(f"❌ Límite superado para IP: {ip}")
-                return JsonResponse(
-                    {"errors": "Has superado el límite de registros por hora desde esta IP."},
-                    status=429
-                )
+            if attempts is None:
+                # Primera vez: setea a 1 con timeout
+                cache.set(key, 1, timeout=self.rate_limit_seconds)
             else:
-                cache.incr(key)
-                # Si es la primera vez, setea el timeout
-                if attempts == 0:
-                    cache.set(key, 1, timeout=self.rate_limit_seconds)
+                if attempts >= self.max_requests:
+                    print(f"❌ Límite superado para IP: {ip}")
+                    return JsonResponse(
+                        {"errors": "Has superado el límite de registros por hora desde esta IP."},
+                        status=429
+                    )
+                else:
+                    cache.incr(key)
 
         response = self.get_response(request)
         return response
