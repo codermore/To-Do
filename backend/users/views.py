@@ -58,15 +58,16 @@ def login(request):
     return response
 
 def get_client_ip(request):
-    """ Obtiene la IP del cliente de forma segura. """
     ip = request.META.get("HTTP_X_FORWARDED_FOR")
     if ip:
-        ip = ip.split(",")[0].strip()  # Toma solo la primera IP si hay múltiples
+        ip = ip.split(",")[0].strip()
     else:
         ip = request.META.get("REMOTE_ADDR", "")
+    
+    print(f"IP detectada: {ip}")  # 👀 Debugging
     return ip
 
-@ratelimit(key=get_client_ip, rate='1/h', method='POST', block=True)
+@ratelimit(key='ip', rate='1/h', method='POST', block=True)  # Usa 'ip' directamente
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
