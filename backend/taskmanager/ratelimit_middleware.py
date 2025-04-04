@@ -17,15 +17,21 @@ class RatelimitMiddleware:
             attempts = cache.get(key)
 
             if attempts is None:
-                # Primera vez: setea a 1 con timeout
                 cache.set(key, 1, timeout=self.rate_limit_seconds)
             else:
                 if attempts >= self.max_requests:
                     print(f"❌ Límite superado para IP: {ip}")
-                    return JsonResponse(
-                        {"errors": "Has superado el límite de registros por hora desde esta IP."},
+                    response = JsonResponse(
+                        {"errors": ["Has superado el límite de registros, intentalo mas tarde"]},
                         status=429
                     )
+                    # 🔥 Agregar headers CORS manualmente para evitar el error en frontend
+                    response["Access-Control-Allow-Origin"] = "http://localhost:5173"
+                    response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+                    response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+                    response["Access-Control-Allow-Credentials"] = "true"
+
+                    return response
                 else:
                     cache.incr(key)
 

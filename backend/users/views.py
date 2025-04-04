@@ -60,20 +60,6 @@ def login(request):
 @api_view(['POST'])  # Solo permite solicitudes POST
 @permission_classes([AllowAny]) 
 def register(request):
-
-    real_ip = request.META.get("HTTP_X_FORWARDED_FOR", request.META.get("REMOTE_ADDR"))
-    print(f"IP detectada: {real_ip}")
-
-    print(f"Rate limit activado: {getattr(request, 'limited', False)}") 
-    print("IP detectada:", request.META.get('REMOTE_ADDR'))  # Verifica la IP real
-
-    # Verifica si la solicitud fue limitada
-    if getattr(request, 'limited', False):
-        return Response(
-            {"errors": "Has superado el límite de intentos. Inténtalo más tarde."}, 
-            status=status.HTTP_429_TOO_MANY_REQUESTS
-        )
-
     """
     Endpoint para registrar un nuevo usuario.
     Recibe los datos del usuario en el cuerpo de la solicitud (JSON).
