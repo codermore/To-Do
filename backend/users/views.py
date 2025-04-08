@@ -50,8 +50,8 @@ def login(request):
         key="auth_token", 
         value=access_token, 
         httponly=True,  # Evita acceso desde JavaScript
-        secure=False,  # Cambia a True si usas HTTPS
-        samesite="Lax",  # Protege contra ataques CSRF
+        secure=True,  # Cambia a True si usas HTTPS
+        samesite="None",  # Protege contra ataques CSRF
         max_age=3600  # Expira en 1 hora (opcional)
     )
 
@@ -113,5 +113,9 @@ def profile(request):
 @api_view(['POST'])
 def logout(request):
     response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)
-    response.delete_cookie("auth_token")  # Elimina la cookie
+    response.delete_cookie(
+        key="auth_token",
+        path="/",
+        samesite="None",
+    )
     return response

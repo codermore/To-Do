@@ -170,6 +170,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://to-do-git-feature-deployvercel-gabriels-projects-f7b84a12.vercel.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -185,6 +186,15 @@ Como por defecto TokenAuthentication busca el token en el Header.
 'rest_framework_simplejwt.authentication.JWTAuthentication',  # Autenticación estándar JWT
 
 '''
+
+
+# # Asegurate que esté True si estás usando https
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# # Muy importante para cookies entre dominios
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
 
 
 REST_FRAMEWORK = {
@@ -209,5 +219,5 @@ SIMPLE_JWT = {
     'AUTH_COOKIE': 'auth_token',  # Nombre de la cookie para el token de acceso
     'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly para evitar acceso desde JS
     'AUTH_COOKIE_SECURE': True,  # Poner en True en producción con HTTPS
-    'AUTH_COOKIE_SAMESITE': 'Lax',  # Protege contra CSRF
+    'AUTH_COOKIE_SAMESITE': 'None',  # Protege contra CSRF
 }
