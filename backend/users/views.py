@@ -113,5 +113,10 @@ def profile(request):
 @api_view(['POST'])
 def logout(request):
     response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)
-    response.delete_cookie("auth_token")  # Elimina la cookie
+    response.delete_cookie(
+        key="auth_token",
+        path="/",
+        samesite="None",
+        secure=True,
+    )
     return response
