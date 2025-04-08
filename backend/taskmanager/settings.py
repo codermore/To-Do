@@ -189,12 +189,12 @@ Como por defecto TokenAuthentication busca el token en el Header.
 
 
 # # Asegurate que esté True si estás usando https
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 # # Muy importante para cookies entre dominios
-# SESSION_COOKIE_SAMESITE = "None"
-# CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
+CSRF_COOKIE_SAMESITE = "None"
 
 
 REST_FRAMEWORK = {
