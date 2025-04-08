@@ -26,7 +26,7 @@ class RatelimitMiddleware:
                         status=429
                     )
                     # 🔥 Agregar headers CORS manualmente para evitar el error en frontend
-                    response["Access-Control-Allow-Origin"] = "https://to-do-git-feature-deployvercel-gabriels-projects-f7b84a12.vercel.app"
+                    response["Access-Control-Allow-Origin"] = "https://to-do-five-ochre.vercel.app"
                     response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
                     response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
                     response["Access-Control-Allow-Credentials"] = "true"
