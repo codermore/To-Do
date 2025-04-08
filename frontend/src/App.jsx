@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage'
 
 
 import ProtectedRoute from './components/ProtectedRoute'
+import HomePage from './pages/HomePage'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/login' element={<LoginPage />} />
+            <Route path='/' element={<HomePage />} />
 
             {/* 🔒 Agrupar rutas protegidas */}
             <Route element={<ProtectedRoute />}>

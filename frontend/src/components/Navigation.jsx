@@ -23,9 +23,9 @@ function Navigation() {
 
   return (
     <div className="flex justify-between py-8 relative">
-      <Link to="/tasks">
+      <Link to="/">
         <h1 className="font-bold text-5xl transition-transform transform hover:scale-110">
-          Task App
+          To-Do App
         </h1>
       </Link>
 

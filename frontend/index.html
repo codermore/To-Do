@@ -1,11 +1,41 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+
+    <title>To-Do App by Gabriel Maso</title>
+    <meta name="description" content="Aplicación de tareas moderna desarrollada con React, Django, PostgreSQL y más.">
+
+    <!-- Estilos base solo para carga inicial (sin afectar layout general) -->
+    <style>
+      body {
+        margin: 0;
+        background-color: #18181b; /* zinc-900 */
+        color: white;
+        font-family: 'Inter', sans-serif;
+      }
+
+      #root:empty::before {
+        content: "Cargando To-Do App...";
+        font-size: 1.2rem;
+        color: #a1a1aa;
+        display: block;
+        text-align: center;
+        margin-top: 3rem;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 1; }
+      }
+    </style>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
