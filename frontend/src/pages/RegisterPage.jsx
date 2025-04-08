@@ -8,7 +8,8 @@ function RegisterPage() {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        watch
     } = useForm();
 
     const {
@@ -17,6 +18,7 @@ function RegisterPage() {
         errors: signupErrors
     } = useAuth()
 
+    const password = watch("password");
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -51,10 +53,20 @@ function RegisterPage() {
                     <input
                         type="text"
                         placeholder='nombre de usuario'
-                        {...register("username", { required: true })}
+                        {...register("username", {
+                            required: true,
+                            pattern: {
+                                value: /^[\w.@+-]+$/,
+                                message: "Solo se permiten letras, números y los caracteres: @ . + - _"
+                            }
+                        })}
                         className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
                     />
-                    {errors.username && <span  className='text-red-500'>* nombre de usuario es requerido</span>}
+                    {errors.username && (
+                        <span className='text-red-500'>
+                            * {errors.username.message || "nombre de usuario es requerido"}
+                        </span>
+                    )}
 
                     <input
                         type="email"
@@ -69,7 +81,20 @@ function RegisterPage() {
                         {...register("password", { required: true })}
                         className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
                     />
-                    {errors.password && <span  className='text-red-500'>* constraseña es requerida</span>}
+                    {errors.password && <span className='text-red-500'>* constraseña es requerida</span>}
+
+                    <input
+                        type="password"
+                        placeholder="confirmar contraseña"
+                        {...register("confirmPassword", {
+                            required: true,
+                            validate: (value) => value === password || "Las contraseñas no coinciden"
+                        })}
+                        className="bg-zinc-700 p-3 rounded-lg block w-full mb-3"
+                    />
+                    {errors.confirmPassword && (
+                        <span className="text-red-500">* {errors.confirmPassword.message}</span>
+                    )}
 
                     <button
                         className='bg-indigo-500 p-3 rounded-lg block w-full mt-3 transition hover:bg-indigo-700'
