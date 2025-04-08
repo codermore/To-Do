@@ -188,13 +188,13 @@ Como por defecto TokenAuthentication busca el token en el Header.
 '''
 
 
-# Asegurate que esté True si estás usando https
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# # Asegurate que esté True si estás usando https
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
-# Muy importante para cookies entre dominios
-SESSION_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SAMESITE = "None"
+# # Muy importante para cookies entre dominios
+# SESSION_COOKIE_SAMESITE = "None"
+# CSRF_COOKIE_SAMESITE = "None"
 
 
 REST_FRAMEWORK = {
@@ -219,5 +219,5 @@ SIMPLE_JWT = {
     'AUTH_COOKIE': 'auth_token',  # Nombre de la cookie para el token de acceso
     'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly para evitar acceso desde JS
     'AUTH_COOKIE_SECURE': True,  # Poner en True en producción con HTTPS
-    'AUTH_COOKIE_SAMESITE': 'Lax',  # Protege contra CSRF
+    'AUTH_COOKIE_SAMESITE': 'None',  # Protege contra CSRF
 }
