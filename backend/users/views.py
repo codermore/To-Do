@@ -115,8 +115,6 @@ def logout(request):
     response = Response({"message": "Logged out"}, status=status.HTTP_200_OK)
     response.delete_cookie(
         key="auth_token",
-        path="/",
-        secure=True,
-        httponly=True,  # Aunque no es obligatorio en delete, por si acaso
+        path="/",  # mantenelo si tu cookie se setea en ese path
     )
     return response
