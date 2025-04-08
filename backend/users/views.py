@@ -50,8 +50,8 @@ def login(request):
         key="auth_token", 
         value=access_token, 
         httponly=True,  # Evita acceso desde JavaScript
-        secure=False,  # Cambia a True si usas HTTPS
-        samesite="Lax",  # Protege contra ataques CSRF
+        secure=True,  # Cambia a True si usas HTTPS
+        samesite="None",  # Protege contra ataques CSRF
         max_age=3600  # Expira en 1 hora (opcional)
     )
 
