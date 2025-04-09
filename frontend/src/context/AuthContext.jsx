@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [errors, setErrors] = useState([])
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -26,6 +27,8 @@ export const AuthProvider = ({ children }) => {
             } catch (error) {
                 setUser(null);
                 setIsAuthenticated(false);
+            } finally {
+                setLoading(false); // 🔥 clave para evitar redirección prematura
             }
         };
 
@@ -75,7 +78,8 @@ export const AuthProvider = ({ children }) => {
             setErrors,
             signout,
             signup,
-            signin
+            signin,
+            loading
 
         }}>
             {children}
