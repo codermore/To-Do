@@ -8,7 +8,7 @@ class Task(models.Model):
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     datecompleted = models.DateTimeField(null=True)
-    important = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE) #CASCADE significa que si se elimina el usuario tambien sus tareas.
 
     def __str__(self):
