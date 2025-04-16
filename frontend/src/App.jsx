@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+
+// Componentes
+import Navigation from './components/Navigation'
+import ProtectedRoute from './components/ProtectedRoute'
+
+// Paginas
 import TasksPage from './pages/TasksPage'
 import TaskFormPage from './pages/TaskFormPage'
-import Navigation from './components/Navigation'
-import { Toaster } from 'react-hot-toast'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
-import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
+
 // 👇 Zustand store
 import useAuthStore from './store/useAuthStore'
 
@@ -16,7 +21,7 @@ function App() {
   const checkAuth = useAuthStore(state => state.checkAuth);
 
   useEffect(() => {
-    checkAuth(); // 👈 Esto debe ejecutarse una vez al inicio
+    checkAuth();
   }, []);
 
   if (loading) return <div className="text-center mt-10 text-lg">Cargando...</div>;

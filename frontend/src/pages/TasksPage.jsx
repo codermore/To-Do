@@ -1,49 +1,36 @@
-/* 
-Componente -->   Rol
--------------------------
-TasksPage  -->   Controla el estado global (lista de tareas)
-TasksList  -->   Se encarga de renderizar todas las tarjetas
-TasksCard  -->   Se encarga de mostrar/editar/eliminar una tarea individualmente
-*/
-
-import React, { useEffect, useState } from 'react';
-import TasksList from '../components/TasksList';
-import { getAllTasks } from '../api/tasks';
+import React from "react";
+import { useTasks, useUpdateTask, useDeleteTask } from "../hooks/useTasks";
+import TasksList from "../components/TasksList";
+import { toast } from "react-hot-toast";
 
 function TasksPage() {
-  const [tasks, setTasks] = useState([]);
+  const { data: tasks, isLoading, isError } = useTasks();
+  const updateTask = useUpdateTask();
+  const deleteTask = useDeleteTask();
 
-  // 🔁 Obtener tareas del backend
-  useEffect(() => {
-    const loadTasks = async () => {
-      const res = await getAllTasks();
-      setTasks(res.data);
-    };
-    loadTasks();
-  }, []);
+  if (isLoading) return <p>Cargando tareas...</p>;
+  if (isError) return <p>Hubo un error al cargar las tareas</p>;
 
-  // 🔄 Actualizar tarea en el estado
-  const handleUpdateTask = (updatedTask) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
-    );
+  const handleUpdate = (id, data) => {
+    updateTask.mutate({ id, data }, {
+      onSuccess: () => toast.success("Tarea actualizada"),
+      onError: () => toast.error("Error al actualizar"),
+    });
   };
 
-  // ❌ Eliminar tarea del estado
-  const handleDeleteTask = (deletedTaskId) => {
-    setTasks((prevTasks) =>
-      prevTasks.filter((task) => task.id !== deletedTaskId)
-    );
+  const handleDelete = (id) => {
+    deleteTask.mutate(id, {
+      onSuccess: () => toast.success("Tarea eliminada"),
+      onError: () => toast.error("Error al eliminar"),
+    });
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <TasksList
-        tasks={tasks}
-        onUpdateTask={handleUpdateTask}
-        onDeleteTask={handleDeleteTask}
-      />
-    </div>
+    <TasksList
+      tasks={tasks}
+      onUpdateTask={handleUpdate}
+      onDeleteTask={handleDelete}
+    />
   );
 }
 
