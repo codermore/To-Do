@@ -1,6 +1,6 @@
-import time
-from django.http import JsonResponse
 from django.core.cache import cache
+from django.http import JsonResponse
+
 
 class RatelimitMiddleware:
     def __init__(self, get_response):
@@ -22,13 +22,21 @@ class RatelimitMiddleware:
                 if attempts >= self.max_requests:
                     print(f"❌ Límite superado para IP: {ip}")
                     response = JsonResponse(
-                        {"errors": ["Has superado el límite de registros, intentalo mas tarde"]},
-                        status=429
+                        {
+                            "errors": [
+                                "Has superado el límite de registros, intentalo mas tarde"
+                            ]
+                        },
+                        status=429,
                     )
                     # 🔥 Agregar headers CORS manualmente para evitar el error en frontend
-                    response["Access-Control-Allow-Origin"] = "https://to-do-five-ochre.vercel.app"
+                    response["Access-Control-Allow-Origin"] = (
+                        "https://to-do-five-ochre.vercel.app"
+                    )
                     response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-                    response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+                    response["Access-Control-Allow-Headers"] = (
+                        "Content-Type, Authorization"
+                    )
                     response["Access-Control-Allow-Credentials"] = "true"
 
                     return response

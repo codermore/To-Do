@@ -9,34 +9,41 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('tasks', '0001_initial'),
+        ("tasks", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='task',
-            name='done',
+            model_name="task",
+            name="done",
         ),
         migrations.AddField(
-            model_name='task',
-            name='created',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="task",
+            name="created",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='task',
-            name='datecompleted',
+            model_name="task",
+            name="datecompleted",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='task',
-            name='important',
+            model_name="task",
+            name="important",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='task',
-            name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="task",
+            name="user",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
