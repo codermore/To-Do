@@ -21,23 +21,21 @@ function TasksCard({ task, onUpdateTask, onDeleteTask }) {
         }
     });
 
-    const onSubmit = async (data) => {
+    const onSubmit = (data) => {
         try {
             const updatedTask = {
                 ...task,
                 ...data,
                 completed,
             };
-            await updateTask(task.id, updatedTask);
-            toast.success('Tarea actualizada');
-            onUpdateTask(updatedTask); // 🔁 actualiza en TasksPage
+            onUpdateTask(task.id, updatedTask);
             setIsEditing(false);
         } catch {
-            toast.error('Error al actualizar');
+            toast.error("Error al actualizar");
         }
     };
 
-    const toggleCompleted = async () => {
+    const toggleCompleted = () => {
         try {
             const newValue = !completed;
             const updatedTask = {
@@ -46,9 +44,8 @@ function TasksCard({ task, onUpdateTask, onDeleteTask }) {
                 description: watch('description'),
                 completed: newValue,
             };
-            await updateTask(task.id, updatedTask);
             setCompleted(newValue);
-            onUpdateTask(updatedTask); // 🔁 actualiza en TasksPage
+            onUpdateTask(task.id, updatedTask); // 🔁 actualiza en TasksPage
         } catch {
             toast.error('No se pudo actualizar el estado');
         }
@@ -58,9 +55,6 @@ function TasksCard({ task, onUpdateTask, onDeleteTask }) {
         const confirmDelete = window.confirm('¿Seguro que querés eliminar esta tarea?');
         if (!confirmDelete) return;
         try {
-            console.log("elimando tarea...")
-            await deleteTask(task.id);
-            toast.success('Tarea eliminada');
             onDeleteTask?.(task.id); // ✅ llama si está definida
         } catch {
             toast.error('Error al eliminar la tarea');

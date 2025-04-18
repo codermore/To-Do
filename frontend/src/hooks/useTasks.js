@@ -32,9 +32,7 @@ export const useUpdateTask = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ id, data }) => {
-            console.log("useUpdateTask id: ",id)
-            console.log("useUpdateTask data: ",data)
-            const res = await updateTask(id.id, data)
+            const res = await updateTask(id, data)
             return res.data;
         },
         onSuccess: () => {

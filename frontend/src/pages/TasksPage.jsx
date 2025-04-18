@@ -12,6 +12,8 @@ function TasksPage() {
   if (isError) return <p>Hubo un error al cargar las tareas</p>;
 
   const handleUpdate = (id, data) => {
+    console.log("handleUpdate id", id)
+    console.log("handleUpdate data", data)
     updateTask.mutate({ id, data }, {
       onSuccess: () => toast.success("Tarea actualizada"),
       onError: () => toast.error("Error al actualizar"),
