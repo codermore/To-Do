@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast'
 import { useEffect } from 'react';
-import { useAuth } from '../context/AuthContext'
+import useAuthStore from '../store/useAuthStore';
+
 
 function RegisterPage() {
     const {
@@ -12,11 +13,10 @@ function RegisterPage() {
         watch
     } = useForm();
 
-    const {
-        isAuthenticated,
-        signup,
-        errors: signupErrors
-    } = useAuth()
+    const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+    const signup = useAuthStore(state => state.signup);
+    const signupErrors = useAuthStore(state => state.errors);
+    const setSignupErrors = useAuthStore(state => state.setErrors);
 
     const password = watch("password");
     const navigate = useNavigate()

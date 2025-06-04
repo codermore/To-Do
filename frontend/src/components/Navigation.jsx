@@ -1,15 +1,17 @@
 import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import { FiLogOut, FiLogIn, FiUser } from "react-icons/fi"; // Importar iconos
+import { FiLogOut, FiLogIn, FiUser } from "react-icons/fi";
+import useAuthStore from "../store/useAuthStore";
 
 function Navigation() {
-  const { isAuthenticated, signout, user } = useAuth();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const signout = useAuthStore((state) => state.signout);
+  const user = useAuthStore((state) => state.user);
+
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const timeoutRef = useRef(null);
 
-  // Manejo de eventos para mostrar y ocultar el menú con retardo
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setMenuOpen(true);
@@ -18,7 +20,12 @@ function Navigation() {
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setMenuOpen(false);
-    }, 500); // ⏳ Espera 500ms antes de ocultar el menú
+    }, 500);
+  };
+
+  const handleLogout = () => {
+    signout();
+    navigate("/login");
   };
 
   return (
@@ -31,25 +38,20 @@ function Navigation() {
 
       {isAuthenticated ? (
         <div className="relative flex items-center space-x-4">
-          {/* Botón de crear tarea */}
           <button className="bg-emerald-600 transition hover:bg-emerald-800 px-3 py-2 rounded-lg text-white">
             <Link to="/tasks-create">Crear Tarea</Link>
           </button>
 
-          {/* 🔹 Contenedor del menú */}
           <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <button className="p-3 text-white font-semibold transition-transform transform hover:scale-125">
               {user.username}
             </button>
 
-            {/* 📌 Menú desplegable con animación de desvanecimiento */}
             <div
-              className={
-                `absolute right-0 mt-2 w-40 
+              className={`absolute right-0 mt-2 w-40 
                 bg-white shadow-lg rounded-lg z-50 
                 transition-opacity duration-500 
-                ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`
-              }
+                ${menuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
             >
               <ul className="py-2 text-gray-700">
                 <li
@@ -64,7 +66,7 @@ function Navigation() {
                 <li
                   className="px-4 py-2 flex items-center cursor-pointer transition hover:bg-red-500 hover:text-white"
                   onClick={() => {
-                    signout();
+                    handleLogout();
                     setMenuOpen(false);
                   }}
                 >

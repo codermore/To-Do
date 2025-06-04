@@ -39,11 +39,22 @@ DEBUG = True
 DJANGO_RATELIMIT_CACHE = "default"  # Asegura que usa el caché definido en CACHES
 RATELIMIT_USE_X_FORWARDED_FOR = True
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.getenv("REDIS_URL"),
+if os.getenv("ENV") == "produ":
+    # En Produccion
+    CACHES = {
+        'default': {
+            'BACKEND': 'django_redis.cache.RedisCache',
+            'LOCATION': os.getenv("REDIS_URL"),
+        }
     }
+elif os.getenv("ENV") == "local":
+    print("cache local")
+    # En desarrollo local
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': os.path.join(BASE_DIR, 'django_cache'),
+        }
 }
 
 # Asegurar que Django confíe en proxies inversos
@@ -66,7 +77,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'django_ratelimit',
 
     #my apps
     'tasks',  # App de tareas

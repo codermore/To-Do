@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { createTask, deleteTask, updateTask, getTask } from '../api/tasks';
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-import { useAuth } from '../context/AuthContext'
+import useAuthStore from '../store/useAuthStore'
 
 function TaskFormPage() {
 
@@ -14,7 +14,8 @@ function TaskFormPage() {
     setValue
   } = useForm();
 
-  const { user } = useAuth()
+  const user = useAuthStore(state => state.user);
+
 
   const navigate = useNavigate()
   const params = useParams()

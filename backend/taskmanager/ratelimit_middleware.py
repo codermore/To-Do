@@ -33,7 +33,10 @@ class RatelimitMiddleware:
 
                     return response
                 else:
-                    cache.incr(key)
+                    # IF REDIS EXIST (Produccion)
+                    # cache.incr(key)
+                    # ELSE (local)
+                    cache.set(key, attempts + 1, timeout=self.rate_limit_seconds)
 
         response = self.get_response(request)
         return response
