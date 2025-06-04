@@ -47,8 +47,8 @@ dist-ssr
 staticfiles/
 
 # djangocache
-*.djangocache
-djangocache/
+*.django_cache
+django_cache/
 
 
 
