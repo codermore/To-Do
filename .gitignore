@@ -46,6 +46,10 @@ dist-ssr
 *.staticfiles/
 staticfiles/
 
+# djangocache
+*.djangocache
+djangocache/
+
 
 
 # Editor directories and files
