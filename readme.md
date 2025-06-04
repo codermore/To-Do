@@ -4,7 +4,7 @@ Una aplicación web moderna para la gestión de tareas, desarrollada con un enfo
 
 ##  Demo
 
-> Próximamente: [https://to-do-gabrielmaso.vercel.app](https://to-do-five-ochre.vercel.app/)
+> Ya disponible: [https://to-do-gabrielmaso.vercel.app](https://to-do-five-ochre.vercel.app/)
 
 ##  🚀 Características Principales
 
