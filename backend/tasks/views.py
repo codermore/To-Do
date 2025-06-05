@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from .models import Task
-from .serializer import TaskSerializer
+from .models import Task, Goal
+from .serializer import TaskSerializer, GoalSerializer
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -26,3 +26,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         if task.user != self.request.user:
             raise PermissionDenied("No tienes permiso para acceder a esta tarea.")
         return task
+    
+class GoalViewSet(viewsets.ModelViewSet):
+    serializer_class = GoalSerializer
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
+
+    def get_queryset(self):
+        return Goal.objects.filter(user=self.request.user)
