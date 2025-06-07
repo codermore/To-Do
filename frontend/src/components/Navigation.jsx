@@ -38,8 +38,8 @@ function Navigation() {
 
       {isAuthenticated ? (
         <div className="relative flex items-center space-x-4">
-          <button className="bg-emerald-600 transition hover:bg-emerald-800 px-3 py-2 rounded-lg text-white">
-            <Link to="/tasks-create">Crear Tarea</Link>
+          <button className="transition hover:bg-emerald-900 px-3 py-2 rounded-lg text-emerald-300">
+            <Link to="/tasks">Dashboard</Link>
           </button>
 
           <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from .models import Task, Goal
-from .serializer import TaskSerializer, GoalSerializer
+from .models import Task, Goal, Board
+from .serializer import TaskSerializer, GoalSerializer, BoardSerializer
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -32,4 +32,14 @@ class GoalViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
 
     def get_queryset(self):
-        return Goal.objects.filter(user=self.request.user)
+        return Goal.objects.filter(board__user=self.request.user)
+    
+class BoardViewSet(viewsets.ModelViewSet):
+    serializer_class = BoardSerializer
+    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
+
+    def get_queryset(self):
+        return Board.objects.filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

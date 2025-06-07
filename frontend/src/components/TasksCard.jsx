@@ -68,9 +68,9 @@ function TasksCard({ task, onUpdateTask, onDeleteTask }) {
     };
 
     return (
-        <div className="bg-zinc-800 p-3 hover:cursor-pointer self-start relative group transition-all duration-300">
+        <div className="bg-zinc-800 p-3 rounded hover:cursor-pointer self-start relative group transition-all duration-300">
             {!isEditing ? (
-                <>
+                <div className='max-h-[50px] min-h-[50px]'>
                     <div className="hidden group-hover:flex absolute top-2 bottom-2 right-2 flex-col items-end justify-between">
                         <button
                             className="text-slate-400 hover:text-white"
@@ -99,9 +99,11 @@ function TasksCard({ task, onUpdateTask, onDeleteTask }) {
                         <h1 className={`font-bold uppercase ${completed ? 'line-through text-gray-400' : ''}`}>
                             {task.title}
                         </h1>
-                        <p className="text-slate-400">{task.description}</p>
+                        <p className= "overflow-hidden text-ellipsis whitespace-nowrap">
+                            {task.description}
+                        </p>
                     </div>
-                </>
+                </div>
             ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
                     <input

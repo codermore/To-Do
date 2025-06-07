@@ -47,9 +47,7 @@ function TaskFormPage() {
       await updateTask(params.id, data)
     } else {
       await createTask(data);
-      toast.success('Tarea creada', {
-        position: 'bottom-right'
-      })
+      toast.success('Tarea creada');
     }
     navigate("/tasks")
   })
@@ -77,7 +75,7 @@ function TaskFormPage() {
           {...register("title", { required: true })}
           className='bg-zinc-700 p-3 rounded-lg block w-full mb-3'
         />
-        {errors.title && <span  className='text-red-500'>titulo es requerido</span>}
+        {errors.title && <span className='text-red-500'>titulo es requerido</span>}
 
         <textarea
           rows="3"

@@ -10,6 +10,7 @@ venv/
 # Archivos de migraciones de Django compilados
 */migrations/*.pyc
 */migrations/__pycache__/
+*/backend/tasks/migrations/*.py
 
 # Archivos de logs
 *.log
