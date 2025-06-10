@@ -8,8 +8,10 @@ import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
-// 👇 Zustand store
-import useAuthStore from './store/useAuthStore'
+import Dashboard from './pages/Dashboard'
+import useAuthStore from './store/useAuthStore' // Zustand store
+import BoardPage from './pages/BoardPage'
+import ReusableFormPage from './pages/ReusableFormPage'
 
 function App() {
   const loading = useAuthStore(state => state.loading);
@@ -34,8 +36,11 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path='/' element={<Navigate to="/tasks" />} />
             <Route path='/tasks' element={<TasksPage />} />
-            <Route path='/tasks-create' element={<TaskFormPage />} />
+            <Route path="/create/:type/:type_id" element={<ReusableFormPage />} />
             <Route path='/tasks/:id' element={<TaskFormPage />} />
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path="/board/:id" element={<BoardPage />} />
+
           </Route>
         </Routes>
         <Toaster />

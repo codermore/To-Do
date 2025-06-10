@@ -39,7 +39,7 @@ function Navigation() {
       {isAuthenticated ? (
         <div className="relative flex items-center space-x-4">
           <button className="transition hover:bg-emerald-900 px-3 py-2 rounded-lg text-emerald-300">
-            <Link to="/tasks">Dashboard</Link>
+            <Link to="/dashboard">Dashboard</Link>
           </button>
 
           <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

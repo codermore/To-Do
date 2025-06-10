@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from .models import Task, Goal, Board
 from .serializer import TaskSerializer, GoalSerializer, BoardSerializer
 
@@ -13,8 +13,21 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Task.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        # Asocia automáticamente la tarea al usuario autenticado
-        serializer.save(user=self.request.user)
+
+        # Obtener el goal_id de los datos de la petición
+        goal_id = self.request.data.get('goal_id')  # o 'goal_id' según como lo envíes
+        
+        if goal_id:
+            try:
+                # Verificar que el goal existe y pertenece al usuario
+                goal = Goal.objects.get(id=goal_id, board__user=self.request.user)
+                # Guardar la tarea con el usuario y el goal
+                serializer.save(user=self.request.user, goal=goal)
+            except Goal.DoesNotExist:
+                raise PermissionDenied("El objetivo no existe o no tienes permiso para acceder a él.")
+        else:
+            # Si no hay goal_id, guardar solo con el usuario
+            serializer.save(user=self.request.user)
 
     def perform_update(self, serializer):
         # Asegura que al actualizar también se mantenga el usuario actual
@@ -34,6 +47,18 @@ class GoalViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Goal.objects.filter(board__user=self.request.user)
     
+    def perform_create(self, serializer):
+        board_id = self.request.data.get('board')  # podés usar board también si querés
+        if not board_id:
+            raise ValidationError("board_id es requerido")
+
+        try:
+            board = Board.objects.get(id=board_id, user=self.request.user)
+        except Board.DoesNotExist:
+            raise PermissionDenied("El board no existe o no tenés permiso.")
+
+        serializer.save(board=board)
+
 class BoardViewSet(viewsets.ModelViewSet):
     serializer_class = BoardSerializer
     permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden acceder
